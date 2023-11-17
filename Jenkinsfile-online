@@ -13,9 +13,9 @@ pipeline {
         DOCKER_CREDENTIAL_ID = 'dockerhub-id'
         GITHUB_CREDENTIAL_ID = 'github-id'
         KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
-        REGISTRY = 'docker.io'
-        DOCKERHUB_NAMESPACE = 'docker_username'
-        GITHUB_ACCOUNT = 'kubesphere'
+        REGISTRY = '192.168.2.104'
+        DOCKERHUB_NAMESPACE = 'devops'
+        GITHUB_ACCOUNT = 'Uniplore-X'
         APP_NAME = 'devops-java-sample'
     }
 
@@ -86,6 +86,8 @@ pipeline {
               container ('maven') {
                 input(id: 'release-image-with-tag', message: 'release image with tag?')
                   withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh 'git config --global http.proxy "$GIT_PROXY"'
+                    sh 'git config --global https.proxy "$GIT_PROXY"'
                     sh 'git config --global user.email "kubesphere@yunify.com" '
                     sh 'git config --global user.name "kubesphere" '
                     sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
